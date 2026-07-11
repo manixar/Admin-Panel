@@ -1,24 +1,25 @@
 import {
     CreditCard,
     Users,
-    ShoppingCart,
+    MessageSquareMore,
     Target,
     TrendingDown,
+    Handshake,
     TrendingUp,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const stats = [
     {
-        title: 'Total Revenue',
-        value: '$124,592',
+        title: 'مجموع فروش',
+        value: '124,592,000',
         change: '+12.5%',
         trend: 'up',
         icon: CreditCard,
         color: 'text-emerald-500',
     },
     {
-        title: 'Active Users',
+        title: 'مجموع مشتریان',
         value: '1,429',
         change: '+8.2%',
         trend: 'up',
@@ -26,21 +27,29 @@ const stats = [
         color: 'text-blue-500',
     },
     {
-        title: 'Orders',
-        value: '892',
-        change: '-2.1%',
-        trend: 'down',
-        icon: ShoppingCart,
-        color: 'text-rose-500',
-    },
-    {
-        title: 'Rate',
+        title: 'کسب و کار های ثبت شده',
         value: '3.24%',
         change: '+5.7%',
         trend: 'up',
-        icon: Target,
+        icon: Handshake,
         color: 'text-purple-500',
     },
+    {
+        title: 'پیامک های ارسال شده',
+        value: '892',
+        change: '-2.1%',
+        trend: 'down',
+        icon: MessageSquareMore,
+        color: 'text-rose-500',
+    },
+    // {
+    //     title: 'نوبت های موفق',
+    //     value: '3.24%',
+    //     change: '+5.7%',
+    //     trend: 'up',
+    //     icon: Target,
+    //     color: 'text-orange-500',
+    // },
 ];
 
 export const StatsCards = () => {

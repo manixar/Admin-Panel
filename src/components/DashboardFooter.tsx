@@ -13,13 +13,14 @@ export const DashboardFooter = ({ sidebarCollapsed }: DashboardFooterProps) => {
             )}
         >
             <div className="text-center text-sm">
-                CoreS | Admin Panel © 2025 All rights reserved. Made with ❤️ by
+                با ورود و ثبت نام شرایط و قوانین کارلینو را قبول میکنید 🐳
                 <a
                     className="pl-1.5 text-primary hover:text-primary/70 duration-300"
-                    href="https://github.com/farzadasgari/"
+                    href="/"
                     target="_blank"
                 >
-                    FarZad
+                    Karlino
+
                 </a>
             </div>
         </footer>

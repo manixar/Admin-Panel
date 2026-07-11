@@ -8,7 +8,7 @@ const activities = [
         id: 1,
         user: {
             name: 'Elena Delgado',
-            avatar: '/cores/avatar/avatar4.webp',
+            avatar: '/public/avatar/avatar4.webp',
         },
         action: 'Created a new project',
         target: 'Website Redesign',
@@ -30,7 +30,7 @@ const activities = [
         id: 3,
         user: {
             name: 'Priya Chen',
-            avatar: '/cores/avatar/avatar5.webp',
+            avatar: '/public/avatar/avatar5.webp',
         },
         action: 'Completed task',
         target: 'Database Migration',
@@ -41,7 +41,7 @@ const activities = [
         id: 4,
         user: {
             name: 'Jordan Thompson',
-            avatar: '/cores/avatar/avatar6.webp',
+            avatar: '/public/avatar/avatar6.webp',
         },
         action: 'Uploaded file',
         target: 'Design assets.zip',
@@ -69,7 +69,7 @@ export const ActivityFeed = () => {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Clock className="h-5 w-5" />
-                    Recent Activity
+                    فعالیت اخیر
                 </CardTitle>
             </CardHeader>
             <CardContent>

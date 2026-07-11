@@ -4,7 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 import path from "path"
 
 export default defineConfig({
-  base: '/cores',
   plugins: [
     react(),
     tailwindcss(),
@@ -13,5 +12,15 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-  },
-})
+},
+    server: {
+      proxy: {
+        '/api': {
+          target: 'https://admapi.karlino.ir',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+      },
+    },
+  })

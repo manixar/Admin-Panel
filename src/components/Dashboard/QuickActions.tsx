@@ -11,12 +11,12 @@ import {
 } from 'lucide-react';
 
 const actions = [
-    { icon: Plus, label: 'New Project', color: 'bg-blue-500' },
-    { icon: Users, label: 'Add User', color: 'bg-emerald-500' },
-    { icon: FileText, label: 'Generate Report', color: 'bg-purple-500' },
-    { icon: Upload, label: 'Import Data', color: 'bg-rose-500' },
-    { icon: Download, label: 'Export Data', color: 'bg-amber-500' },
-    { icon: Settings, label: 'Settings', color: 'bg-slate-500' },
+    { icon: Plus, label: 'کسب و کار جدید', color: 'bg-blue-500' },
+    { icon: Users, label: 'اضافه کردن مدیر', color: 'bg-emerald-500' },
+    { icon: FileText, label: 'تهیه گزارش', color: 'bg-purple-500' },
+    { icon: Upload, label: 'بارگزاری دیتا', color: 'bg-rose-500' },
+    { icon: Download, label: 'خروجی دیتا', color: 'bg-amber-500' },
+    { icon: Settings, label: 'تنظیمات پنل', color: 'bg-slate-500' },
 ];
 
 export const QuickActions = () => {
@@ -25,7 +25,7 @@ export const QuickActions = () => {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Milestone className="h-5 w-5" />
-                    Quick Actions
+                    دسترسی سریع
                 </CardTitle>
             </CardHeader>
             <CardContent>

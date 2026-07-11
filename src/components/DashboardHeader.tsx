@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
+import { logout } from '@/apis/auth';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -23,26 +24,28 @@ import {
     Settings,
     User,
     LogOut,
-    LogIn,
-    UserPlus,
-    Github,
     Search,
     Sun,
     ChevronDown,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface DashboardHeaderProps {
     onToggleSidebar: () => void;
     sidebarCollapsed: boolean;
-    onPageChange: (page: string) => void;
 }
 
 export const DashboardHeader = ({
     onToggleSidebar,
     sidebarCollapsed,
-    onPageChange,
 }: DashboardHeaderProps) => {
     const [darkMode, setDarkMode] = useState(false);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/', { replace: true });
+    };
 
     useEffect(() => {
         if (darkMode) {
@@ -55,18 +58,24 @@ export const DashboardHeader = ({
     const mockNotifications = [
         {
             id: 1,
-            title: 'New User Registered',
-            time: '2 min ago',
+            title: 'کسب و کار سالن اضافه شد',
+            time: '۲ دقیقه پیش',
             unread: true,
         },
-        { id: 2, title: 'Payment Received', time: '10 min ago', unread: true },
+        {
+            id: 2,
+            title: '۱۰۰۰ پیامک انبوه ارسال شد',
+            time: '۱۰ دقیقه پیش',
+            unread: true,
+        },
         {
             id: 3,
-            title: 'Server Maintenance Scheduled',
-            time: '1 hour ago',
+            title: 'سرویس فلان اضافه شد',
+            time: '۱ ساعت پیش',
             unread: false,
         },
     ];
+
     return (
         <header className="fixed top-0 left-0 right-0 h-16 z-50 bg-background border-b duration-300">
             <div className="flex items-center justify-between h-full px-4">
@@ -116,17 +125,13 @@ export const DashboardHeader = ({
                     </button>
                     {/* Brand */}
                     <div className="flex items-center gap-2">
-                        <button
-                            onClick={() => onPageChange('dashboard')}
-                            className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center cursor-pointer"
-                        >
-                            <span className="text-primary-foreground font-bold text-md">
-                                C
-                            </span>
+                        <button onClick={() => navigate('/dashboard')}>
+                            <img
+                                src="/public/logo/karlino-typography.png"
+                                alt="Karlino"
+                                className="h-9 w-auto mx-auto"
+                            />
                         </button>
-                        <span className="font-bold text-lg hidden sm:block">
-                            CoreS
-                        </span>
                     </div>
                 </div>
 
@@ -135,7 +140,7 @@ export const DashboardHeader = ({
                     <form className="relative w-full">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                            placeholder="Search anything..."
+                            placeholder="دنبال چی میگردی؟"
                             className="pl-10 w-full"
                         />
                     </form>
@@ -171,7 +176,7 @@ export const DashboardHeader = ({
                         </PopoverTrigger>
                         <PopoverContent className="w-80 p-0">
                             <div className="p-4 border-b">
-                                <h3 className="font-semibold">Notifications</h3>
+                                <h3 className="font-semibold">اعلان ها</h3>
                             </div>
                             <div className="max-h-64 overflow-y-auto">
                                 {mockNotifications.map((notification) => (
@@ -201,10 +206,10 @@ export const DashboardHeader = ({
                                     size="sm"
                                     className="w-full cursor-pointer"
                                     onClick={() =>
-                                        onPageChange('notifications')
+                                        navigate('/dashboard/notifications')
                                     }
                                 >
-                                    View All Notifications
+                                    مشاهده همه اعلان ها
                                 </Button>
                             </div>
                         </PopoverContent>
@@ -214,7 +219,7 @@ export const DashboardHeader = ({
                         variant="ghost"
                         size="sm"
                         className="cursor-pointer"
-                        onClick={() => onPageChange('settings')}
+                        onClick={() => navigate('/dashboard/settings')}
                     >
                         <Settings className="h-5 w-5" />
                     </Button>
@@ -228,7 +233,7 @@ export const DashboardHeader = ({
                             >
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage
-                                        src="/cores/avatar/avatar.webp"
+                                        src="/public/avatar/avatar.webp"
                                         alt="profile"
                                     />
                                     <AvatarFallback>FA</AvatarFallback>
@@ -236,58 +241,30 @@ export const DashboardHeader = ({
                             </Button>
                         </DropdownMenuTrigger>
 
-                        <DropdownMenuContent className="w-56" align="end">
+                        <DropdownMenuContent className="w-56" align="start">
                             <DropdownMenuItem className="cursor-pointer">
                                 <User className="h-4 w-4 mr-2" />
-                                Profile
+                                پروفایل
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 className="cursor-pointer"
-                                onClick={() => onPageChange('settings')}
+                                onClick={() => navigate('/dashboard/settings')}
                             >
                                 <Settings className="h-4 w-4 mr-2" />
-                                Settings
+                                تنظیمات
                             </DropdownMenuItem>
 
                             <DropdownMenuSeparator />
 
                             <DropdownMenuItem
+                                onClick={handleLogout}
                                 className="cursor-pointer"
-                                asChild
                             >
-                                <a href="/cores/register">
-                                    <UserPlus className="h-4 w-4 mr-2" />
-                                    Register
-                                </a>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="cursor-pointer"
-                                asChild
-                            >
-                                <a href="/cores/login">
-                                    <LogIn className="h-4 w-4 mr-2" />
-                                    Login
-                                </a>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="cursor-pointer">
                                 <LogOut className="h-4 w-4 mr-2" />
-                                Logout
+                                خروج
                             </DropdownMenuItem>
 
                             <DropdownMenuSeparator />
-
-                            <DropdownMenuItem
-                                className="cursor-pointer"
-                                asChild
-                            >
-                                <a
-                                    href="https://github.com/farzadasgari/cores"
-                                    target="_blank"
-                                >
-                                    <Github className="h-4 w-4 mr-2" />
-                                    Repository
-                                </a>
-                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

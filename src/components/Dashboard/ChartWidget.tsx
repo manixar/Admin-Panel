@@ -13,50 +13,47 @@ import {
 import { ChartNoAxesCombined } from 'lucide-react';
 
 const data = [
-    { name: 'Jan', revenue: 4000, users: 2400 },
-    { name: 'Feb', revenue: 3000, users: 1398 },
-    { name: 'Mar', revenue: 2000, users: 9800 },
-    { name: 'Apr', revenue: 2780, users: 3908 },
-    { name: 'May', revenue: 1890, users: 4800 },
-    { name: 'Jun', revenue: 2390, users: 3800 },
-    { name: 'Jul', revenue: 3490, users: 4300 },
-    { name: 'Aug', revenue: 4000, users: 2400 },
-    { name: 'Sep', revenue: 3000, users: 1398 },
-    { name: 'Oct', revenue: 2000, users: 9800 },
-    { name: 'Nov', revenue: 2780, users: 3908 },
-    { name: 'Dec', revenue: 1890, users: 4800 },
+    { name: 'فروردین', sms: 4000, business: 2400 },
+    { name: 'اردیبهشت', sms: 3000, business: 1398 },
+    { name: 'خرداد', sms: 2000, business: 9800 },
+    { name: 'تیر', sms: 2780, business: 3908 },
+    { name: 'مرداد', sms: 1890, business: 4800 },
+    { name: 'شهریور', sms: 2390, business: 3800 },
+    { name: 'مهر', sms: 3490, business: 4300 },
+    { name: 'ابان', sms: 4000, business: 2400 },
+    { name: 'آذر', sms: 3000, business: 1398 },
+    { name: 'دی', sms: 2000, business: 9800 },
+    { name: 'بهمن', sms: 2780, business: 3908 },
+    { name: 'اسفند', sms: 1890, business: 4800 },
 ];
 export const ChartWidget = () => {
-    const [activeMetric, setActiveMetric] = useState<'revenue' | 'users'>(
-        'revenue'
-    );
+    const [activeMetric, setActiveMetric] = useState<'sms' | 'business'>('sms');
+    const reverseData = [...data].reverse();
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-row items-center justify-between ">
                 <CardTitle className="flex items-center gap-2">
                     <ChartNoAxesCombined className="h-5 w-5" />
-                    Performance Overview
+                    نمودار پیشرفته
                 </CardTitle>
                 <div className="flex gap-2">
                     <Button
-                        variant={
-                            activeMetric === 'revenue' ? 'default' : 'outline'
-                        }
+                        variant={activeMetric === 'sms' ? 'default' : 'outline'}
                         size="sm"
-                        onClick={() => setActiveMetric('revenue')}
+                        onClick={() => setActiveMetric('sms')}
                         className="cursor-pointer"
                     >
-                        Revenue
+                        پیامک های ارسالی
                     </Button>
                     <Button
                         variant={
-                            activeMetric === 'users' ? 'default' : 'outline'
+                            activeMetric === 'business' ? 'default' : 'outline'
                         }
                         size="sm"
-                        onClick={() => setActiveMetric('users')}
+                        onClick={() => setActiveMetric('business')}
                         className="cursor-pointer"
                     >
-                        Users
+                        کسب و کار های جدید
                     </Button>
                 </div>
             </CardHeader>
@@ -93,17 +90,20 @@ export const ChartWidget = () => {
                                 axisLine={false}
                                 tickLine={false}
                                 className="text-muted-foreground"
+                                reversed={true}
                             />
                             <YAxis
                                 axisLine={false}
                                 tickLine={false}
                                 className="text-muted-foreground"
+                                orientation="right"
                             />
                             <Tooltip
                                 contentStyle={{
                                     backgroundColor: 'var(--card)',
                                     border: '1px solid var(--border)',
                                     borderRadius: '8px',
+                                    direction: 'rtl',
                                 }}
                             />
                             <Area

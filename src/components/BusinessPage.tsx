@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { UsersHeader } from '@/components/Users/UsersHeader';
-import { UsersTable } from '@/components/Users/UsersTable';
-import { AddEditUserModal } from '@/components/Users/AddEditUserModal';
+import { BusinessHeader } from '@/components/Business/BusinessHeader.tsx';
+import { AddEditBusinessModal } from '@/components/Business/AddEditBusinessModal.tsx';
+import { BusinessTable } from '@/components/Business/BusinessTable.tsx';
 
-export interface User {
+export interface Business {
     id: string;
     name: string;
     email: string;
     role: string;
-    status: 'Active' | 'Pending' | 'Inactive';
+    status: 'فعال' | 'تعلیق' | 'غیرفعال';
     department: string;
     lastLogin: string;
     avatar?: string;
@@ -16,15 +16,15 @@ export interface User {
     employeeId?: string;
 }
 
-export const UsersPage = () => {
-    const users: User[] = [
+export const BusinessPage = () => {
+    const business: Business[] = [
         {
             id: '1',
-            name: 'John Doe',
-            email: 'john.doe@company.com',
-            role: 'Admin',
-            status: 'Active',
-            department: 'IT',
+            name: 'کسب و کار ۱',
+            email: '...@company.com',
+            role: 'ادمین',
+            status: 'فعال',
+            department: 'سالن',
             lastLogin: '2025-10-11T10:30:03',
             avatar: '/public/avatar/avatar.webp',
             phone: '+1 (555) 123-4567',
@@ -32,35 +32,35 @@ export const UsersPage = () => {
         },
         {
             id: '2',
-            name: 'Sarah Wilson',
+            name: 'کسب و کار ۲',
             email: 'sarah.wilson@company.com',
-            role: 'Editor',
-            status: 'Active',
-            department: 'Marketing',
+            role: 'ادمین',
+            status: 'فعال',
+            department: 'رستوران',
             lastLogin: '2025-10-12T16:35:51',
-            avatar: '...',
+            avatar: '/public/avatar/avatar3.webp',
             phone: '+1 (555) 234-5678',
             employeeId: 'CS002',
         },
         {
             id: '3',
-            name: 'Mike Johnson',
+            name: 'کسب و کار ۳',
             email: 'mike.johnson@company.com',
-            role: 'Viewer',
-            status: 'Inactive',
-            department: 'Shop',
-            lastLogin: 'Never',
+            role: 'مدیر',
+            status: 'غیرفعال',
+            department: 'انلاین شاپ',
+            lastLogin: '2025-10-12T16:35:51',
             avatar: '/public/avatar/avatar5.webp',
             phone: '+1 (555) 345-6789',
             employeeId: 'CS003',
         },
         {
             id: '4',
-            name: 'Emily Chen',
+            name: 'کسب و کار ۴',
             email: 'emily.chen@company.com',
-            role: 'Editor',
-            status: 'Pending',
-            department: 'Graphic',
+            role: 'مدیر',
+            status: 'تعلیق',
+            department: 'تعمیرگاه',
             lastLogin: '2025-10-08T11:28:32',
             avatar: '/public/avatar/avatar2.webp',
             phone: '+1 (555) 456-7890',
@@ -77,11 +77,11 @@ export const UsersPage = () => {
 
     return (
         <div className="space-y-6 p-6">
-            <UsersHeader onAddUser={handleAddUser} />
+            <BusinessHeader onAddUser={handleAddUser} />
 
-            <UsersTable users={users} />
+            <BusinessTable business={business} />
 
-            <AddEditUserModal
+            <AddEditBusinessModal
                 isOpen={isAddEditUserModal}
                 onClose={() => setIsAddEditUserModal(false)}
             />

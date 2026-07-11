@@ -6,6 +6,7 @@ import { QuickActions } from '@/components/Dashboard/QuickActions';
 import { ActivityFeed } from '@/components/Dashboard/ActivityFeed';
 import { SettingsPage } from '@/components/SettingsPage';
 import { UsersPage } from '@/components/UsersPage';
+import { BusinessPage } from '@/components/BusinessPage.tsx';
 
 interface DashboardContentProps {
     currentPage: string;
@@ -14,16 +15,19 @@ interface DashboardContentProps {
 export const DashboardContent = ({ currentPage }: DashboardContentProps) => {
     const renderContent = () => {
         switch (currentPage) {
+            case 'business':
+                return <BusinessPage />;
             case 'users':
-                return <UsersPage />;
+                return <div className="Space-y-6"> Users Page</div>;
+            // return <UsersPage />;
             case 'orders':
                 return <div className="space-y-6">Orders Page</div>;
             case 'payments':
                 return <div className="space-y-6">Payments Page</div>;
             case 'notifications':
                 return <div className="space-y-6">Notifications Page</div>;
-            case 'database':
-                return <div className="space-y-6">Database Page</div>;
+            case 'messages':
+                return <div className="space-y-6">Message Page</div>;
             case 'security':
                 return <div className="space-y-6">Security Page</div>;
             case 'tickets':
@@ -31,12 +35,13 @@ export const DashboardContent = ({ currentPage }: DashboardContentProps) => {
             case 'profile':
                 return <div className="space-y-6">Profile Page</div>;
             case 'settings':
-                return <SettingsPage />;
+                return <div className="Space-y-6"> Setting Page</div>;
+            // return <SettingsPage />;
             default:
                 return (
                     <div className="space-y-6">
                         {/* Welcom Section */}
-                        <WelcomeSection />
+                        {/*<WelcomeSection />*/}
 
                         {/* Statistical Cards */}
                         <StatsCards />
@@ -55,7 +60,7 @@ export const DashboardContent = ({ currentPage }: DashboardContentProps) => {
                                 <QuickActions />
 
                                 {/* Activities */}
-                                <ActivityFeed />
+                                {/*<ActivityFeed />*/}
                             </div>
                         </div>
                     </div>

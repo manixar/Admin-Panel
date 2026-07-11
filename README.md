@@ -1,6 +1,5 @@
 <h1 align="center">
-CoreS
-</h1>
+Karlino</h1>
 
 <div align="center">
 

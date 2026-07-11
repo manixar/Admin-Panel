@@ -8,56 +8,56 @@ const recentOrders = [
     {
         id: '#2852',
         user: {
-            name: 'John Doe',
-            avatar: '/cores/avatar/avatar3.webp',
+            name: 'کاربر ۱',
+            avatar: '/public/avatar/avatar3.webp',
         },
-        product: 'Pro Plan',
-        amount: '$69.00',
-        status: 'Unknown',
-        date: '2025-10-12',
+        product: 'پیامک انبوه',
+        amount: '1,000,000 تومان',
+        status: 'درحال پرداخت',
+        date: '۱۴۰۵/۰۲/۰۲',
     },
     {
         id: '#2853',
         user: {
-            name: 'Sarah Johnson',
-            avatar: '/cores/avatar/avatar.webp',
+            name: 'کاربر ۲',
+            avatar: '/public/avatar/avatar.webp',
         },
-        product: 'Premium Plan',
-        amount: '$99.00',
-        status: 'Pending',
-        date: '2025-10-12',
+        product: 'پیامک انبوه',
+        amount: '1,000,000 تومان',
+        status: 'درحال پرداخت',
+        date: '۱۴۰۵/۰۲/۰۲',
     },
     {
         id: '#2854',
         user: {
-            name: 'Farzad Asgari',
+            name: 'کاربر ۳',
             avatar: '..',
         },
-        product: 'Basic Plan',
-        amount: '$39.00',
-        status: 'Failed',
-        date: '2025-10-12',
+        product: 'پیامک انبوه',
+        amount: '1,000,000 تومان',
+        status: 'خطا در پرداخت',
+        date: '۱۴۰۵/۰۲/۰۲',
     },
     {
         id: '#2855',
         user: {
-            name: 'John Smith',
-            avatar: '/cores/avatar/avatar2.webp',
+            name: 'کاربر ۴',
+            avatar: '/public/avatar/avatar2.webp',
         },
-        product: 'Enterprise Plan',
-        amount: '$199.00',
-        status: 'Completed',
-        date: '2025-10-12',
+        product: 'پیامک انبوه',
+        amount: '1,000,000 تومان',
+        status: 'انجام شده',
+        date: '۱۴۰۵/۰۲/۰۲',
     },
 ];
 
 const getStatusColor = (status: string) => {
     switch (status) {
-        case 'Completed':
+        case 'انجام شده':
             return 'bg-emerald-100 hover:bg-emerald-200 text-emerald-900 dark:bg-emerald-200 dark:hover:bg-emerald-300 dark:text-emerald-950';
-        case 'Pending':
+        case 'درحال پرداخت':
             return 'bg-amber-100 hover:bg-amber-200 text-amber-900 dark:bg-amber-200 dark:hover:bg-amber-300 dark:text-amber-950';
-        case 'Failed':
+        case 'خطا در پرداخت':
             return 'bg-red-100 hover:bg-red-200 text-red-900 dark:bg-red-200 dark:hover:bg-red-300 dark:text-red-950';
         default:
             return 'bg-slate-100 hover:bg-slate-200 text-slate-900 dark:bg-slate-200 dark:hover:bg-slate-300 dark:text-slate-950';
@@ -70,10 +70,10 @@ export const TableWidget = () => {
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
                     <ShoppingCart className="h-5 w-5" />
-                    Recent Orders
+                    پرداختی های اخیر
                 </CardTitle>
                 <Button variant="outline" size="sm" className="cursor-pointer">
-                    View All
+                    مشاهده کل
                 </Button>
             </CardHeader>
             <CardContent>
