@@ -31,13 +31,17 @@ import { EditBusinessModal } from './EditBusinessModal';
 interface BusinessTableProps {
     business: Business[];
     onUpdateBusiness: (updatedBusiness: Business) => void;
-    onDeleteBusiness: (businessId: number) => void;
+    onDeleteBusiness: (businessId: string) => void;
+    selectedIds: string[];
+    onSelectedIdsChange: (ids: string[]) => void;
 }
 
 export const BusinessTable = ({
     business,
     onUpdateBusiness,
     onDeleteBusiness,
+    selectedIds,
+    onSelectedIdsChange,
 }: BusinessTableProps) => {
     const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(
         null
@@ -46,12 +50,10 @@ export const BusinessTable = ({
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case 'فعال':
+            case 'تایید شده':
                 return 'bg-emerald-100 hover:bg-emerald-200 text-emerald-900 dark:bg-emerald-200 dark:hover:bg-emerald-300 dark:text-emerald-950';
             case 'تعلیق':
                 return 'bg-amber-100 hover:bg-amber-200 text-amber-900 dark:bg-amber-200 dark:hover:bg-amber-300 dark:text-amber-950';
-            case 'غیرفعال':
-                return 'bg-red-100 hover:bg-red-200 text-red-900 dark:bg-red-200 dark:hover:bg-red-300 dark:text-red-950';
             case 'رد شده':
                 return 'bg-red-200 hover:bg-red-300 text-red-900 dark:bg-red-300 dark:hover:bg-red-400 dark:text-red-950';
             default:
@@ -60,7 +62,7 @@ export const BusinessTable = ({
     };
 
     const formatDate = (dateString: string) => {
-        if (dateString === 'Never') return 'هرگز';
+        if (!dateString || dateString === 'Never') return 'هرگز';
         return new Date(dateString).toLocaleDateString('fa-IR');
     };
 
@@ -75,10 +77,29 @@ export const BusinessTable = ({
         setSelectedBusiness(null);
     };
 
-    const handleDelete = (businessId: number) => {
+    const handleDelete = (businessId: string) => {
         onDeleteBusiness(businessId);
         setIsEditModalOpen(false);
         setSelectedBusiness(null);
+    };
+
+    const allSelected =
+        business.length > 0 && selectedIds.length === business.length;
+
+    const toggleSelectAll = () => {
+        if (allSelected) {
+            onSelectedIdsChange([]);
+        } else {
+            onSelectedIdsChange(business.map((b) => b.id));
+        }
+    };
+
+    const toggleSelectOne = (id: string) => {
+        if (selectedIds.includes(id)) {
+            onSelectedIdsChange(selectedIds.filter((sid) => sid !== id));
+        } else {
+            onSelectedIdsChange([...selectedIds, id]);
+        }
     };
 
     return (
@@ -90,25 +111,31 @@ export const BusinessTable = ({
                             <TableHeader className="bg-muted/40">
                                 <TableRow>
                                     <TableHead className="w-12 text-center">
-                                        <Checkbox />
+                                        <Checkbox
+                                            checked={allSelected}
+                                            onCheckedChange={toggleSelectAll}
+                                        />
                                     </TableHead>
                                     <TableHead className="w-16 text-center">
-                                        شناسه
+                                        ID
                                     </TableHead>
                                     <TableHead className="text-right">
-                                        کسب و کار
+                                        نام کسب و کار
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        مدیر کسب و کار
                                     </TableHead>
                                     <TableHead className="w-24 text-center">
-                                        نقش
+                                        شماره مدیر کسب و کار
                                     </TableHead>
                                     <TableHead className="w-24 text-center">
-                                        دپارتمان
+                                        نوع خدمات
                                     </TableHead>
                                     <TableHead className="w-24 text-center">
                                         وضعیت
                                     </TableHead>
                                     <TableHead className="w-32 text-center">
-                                        تاریخ ایجاد
+                                        تاریخ ایجاد کسب و کار
                                     </TableHead>
                                     <TableHead className="w-20 text-center">
                                         عملیات
@@ -119,7 +146,16 @@ export const BusinessTable = ({
                                 {business.map((businessItem) => (
                                     <TableRow key={businessItem.id}>
                                         <TableCell className="text-center">
-                                            <Checkbox />
+                                            <Checkbox
+                                                checked={selectedIds.includes(
+                                                    businessItem.id
+                                                )}
+                                                onCheckedChange={() =>
+                                                    toggleSelectOne(
+                                                        businessItem.id
+                                                    )
+                                                }
+                                            />
                                         </TableCell>
                                         <TableCell className="text-center font-mono text-sm">
                                             {businessItem.id}
@@ -131,10 +167,12 @@ export const BusinessTable = ({
                                                         src={
                                                             businessItem.avatar
                                                         }
-                                                        alt={businessItem.name}
+                                                        alt={
+                                                            businessItem.businessName
+                                                        }
                                                     />
                                                     <AvatarFallback>
-                                                        {businessItem.name
+                                                        {businessItem.businessName
                                                             .split(' ')
                                                             .map((n) => n[0])
                                                             .join('')
@@ -143,26 +181,34 @@ export const BusinessTable = ({
                                                 </Avatar>
                                                 <div className="min-w-0">
                                                     <div className="font-medium truncate text-right">
-                                                        {businessItem.name}
+                                                        {
+                                                            businessItem.businessName
+                                                        }
                                                     </div>
                                                     <div className="text-muted-foreground text-sm truncate text-right">
-                                                        {businessItem.email}
+                                                        {
+                                                            businessItem.businessEmail
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
+                                        </TableCell>
+                                        <TableCell className="text-center">
+                                            {businessItem.ownerName}
+                                        </TableCell>
+                                        <TableCell
+                                            className="text-center whitespace-nowrap"
+                                            dir="ltr"
+                                        >
+                                            {businessItem.ownerPhone || '-'}
                                         </TableCell>
                                         <TableCell className="text-center">
                                             <Badge
                                                 variant="outline"
                                                 className="whitespace-nowrap"
                                             >
-                                                {businessItem.role}
+                                                {businessItem.categoryName}
                                             </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-center">
-                                            <span className="text-sm">
-                                                {businessItem.department}
-                                            </span>
                                         </TableCell>
                                         <TableCell className="text-center">
                                             <Badge
@@ -243,7 +289,6 @@ export const BusinessTable = ({
                         >
                             <ChevronRight className="h-4 w-4" />
                         </Button>
-
                         <div className="flex items-center gap-1">
                             <Button
                                 variant="default"
@@ -252,22 +297,7 @@ export const BusinessTable = ({
                             >
                                 ۱
                             </Button>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="cursor-pointer h-8 w-8 p-0"
-                            >
-                                ۲
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="cursor-pointer h-8 w-8 p-0"
-                            >
-                                ۳
-                            </Button>
                         </div>
-
                         <Button
                             variant="outline"
                             size="sm"

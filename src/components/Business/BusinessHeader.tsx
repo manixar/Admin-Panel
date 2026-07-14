@@ -1,4 +1,4 @@
-import { Download, Filter, FunnelX, Home, Plus, Trash2 } from 'lucide-react';
+import { Download, Home, Plus, Trash2, FunnelX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -19,9 +19,29 @@ import { Search, X, FileText, Sheet, FileSpreadsheet } from 'lucide-react';
 
 interface BusinessHeaderProps {
     onAddUser: () => void;
+    searchQuery: string;
+    onSearchChange: (value: string) => void;
+    statusFilter: string;
+    onStatusChange: (value: string) => void;
+    categoryFilter: string;
+    onCategoryChange: (value: string) => void;
+    onClearFilters: () => void;
+    selectedCount: number;
+    onDeleteSelected: () => void;
 }
 
-export const BusinessHeader = ({ onAddUser }: BusinessHeaderProps) => {
+export const BusinessHeader = ({
+    onAddUser,
+    searchQuery,
+    onSearchChange,
+    statusFilter,
+    onStatusChange,
+    categoryFilter,
+    onCategoryChange,
+    onClearFilters,
+    selectedCount,
+    onDeleteSelected,
+}: BusinessHeaderProps) => {
     return (
         <div className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -56,35 +76,36 @@ export const BusinessHeader = ({ onAddUser }: BusinessHeaderProps) => {
                     <Input
                         placeholder="دنبال کدوم کسب و کاری؟ سرچ کن..."
                         className="pr-10"
+                        value={searchQuery}
+                        onChange={(e) => onSearchChange(e.target.value)}
                     />
-                    <Button
-                        variant="ghost"
-                        className="absolute left-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-                    >
-                        <X className="h-3 w-3" />
-                    </Button>
+                    {searchQuery && (
+                        <Button
+                            variant="ghost"
+                            className="absolute left-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+                            onClick={() => onSearchChange('')}
+                        >
+                            <X className="h-3 w-3" />
+                        </Button>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
-                    <div className="flex items-center gap-2 px-2 py-0.5 bg-muted rounded-lg">
-                        <Badge variant="secondary">
-                            n کسب و کار انتخاب شده
-                        </Badge>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-destructive/70 hover:text-destructive dark:text-rose-400 dark:hover:text-rose-600 cursor-pointer"
-                        >
-                            <Trash2 className="h-4 w-4" />
-                        </Button>
-                    </div>
-                    <Button
-                        variant="outline"
-                        className="cursor-pointer bg-accent"
-                    >
-                        <Filter className="h-4 w-4 mr-2" />
-                        Filters
-                    </Button>
+                    {selectedCount > 0 && (
+                        <div className="flex items-center gap-2 px-2 py-0.5 bg-muted rounded-lg">
+                            <Badge variant="secondary">
+                                {selectedCount} کسب و کار انتخاب شده
+                            </Badge>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-destructive/70 hover:text-destructive dark:text-rose-400 dark:hover:text-rose-600 cursor-pointer"
+                                onClick={onDeleteSelected}
+                            >
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    )}
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -113,48 +134,66 @@ export const BusinessHeader = ({ onAddUser }: BusinessHeaderProps) => {
                     </DropdownMenu>
                 </div>
             </div>
-            <div className="bg-muted/50 rounded-lg p-4 space-y-4 ">
+
+            <div className="bg-muted/50 rounded-lg p-4 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label className="text-sm font-medium mb-2 block">
                             جست و جو بر اساس وضعیت
                         </label>
-                        <Select>
+                        <Select
+                            value={statusFilter}
+                            onValueChange={onStatusChange}
+                        >
                             <SelectTrigger className="w-full">
-                                <SelectValue placeholder="فعال" />
+                                <SelectValue placeholder="همه" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="All">همه</SelectItem>
-                                <SelectItem value="فعال">فعال</SelectItem>
+                                <SelectItem value="تایید شده">
+                                    تایید شده
+                                </SelectItem>
                                 <SelectItem value="تعلیق">تعلیق</SelectItem>
-                                <SelectItem value="غیرفعال">غیرفعال</SelectItem>
+                                <SelectItem value="رد شده">رد شده</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                     <div>
                         <label className="text-sm font-medium mb-2 block">
-                            جست و جو بر اساس نقش
+                            جست و جو بر اساس دسته‌بندی
                         </label>
-                        <div>
-                            <Select>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="مدیر" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="All">همه</SelectItem>
-                                    <SelectItem value="Boss">مدیر</SelectItem>
-                                    <SelectItem value="Admin">ادمین</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                        <Select
+                            value={categoryFilter}
+                            onValueChange={onCategoryChange}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="همه" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="All">همه</SelectItem>
+                                <SelectItem value="خدمات آرایشی بهداشتی">
+                                    خدمات آرایشی بهداشتی
+                                </SelectItem>
+                                <SelectItem value="کافه | رستوران">
+                                    کافه | رستوران
+                                </SelectItem>
+                                <SelectItem value="فروشگاه اینترنتی">
+                                    فروشگاه اینترنتی
+                                </SelectItem>
+                                <SelectItem value="خدمات ماشین و لوازم یدکی">
+                                    خدمات ماشین و لوازم یدکی
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="flex items-end">
                         <Button
                             variant="outlineDestructive"
                             className="w-full cursor-pointer"
+                            onClick={onClearFilters}
                         >
                             <FunnelX />
-                            حذف فیلتر{' '}
+                            حذف فیلتر
                         </Button>
                     </div>
                 </div>

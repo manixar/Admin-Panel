@@ -1,5 +1,3 @@
-// src/components/EditBusinessModal.tsx
-
 import React, { useState, useEffect } from 'react';
 import {
     Dialog,
@@ -27,10 +25,9 @@ interface EditBusinessModalProps {
     onClose: () => void;
     business: Business | null;
     onUpdate: (updatedBusiness: Business) => void;
-    onDelete: (businessId: number) => void;
+    onDelete: (businessId: string) => void;
 }
 
-// رسانه‌ها
 const mediaItems = [
     {
         id: 'image1',
@@ -57,7 +54,14 @@ const mediaItems = [
         url: '/videos/business.mp4',
     },
 ];
-
+// const socialMediaItems = [
+//     {
+//         id: 'instagram',
+//         label: 'اینستاگرام',
+//         icon: Instagram,
+//         value: formData.socialMedia?.instagram || '',
+//     },
+// ];
 export const EditBusinessModal = ({
     isOpen,
     onClose,
@@ -65,23 +69,20 @@ export const EditBusinessModal = ({
     onUpdate,
     onDelete,
 }: EditBusinessModalProps) => {
-    // State اصلی
     const [formData, setFormData] = useState<Business | null>(null);
-    const [status, setStatus] = useState<string>('فعال');
+    const [status, setStatus] = useState<string>('تایید شده');
     const [rejections, setRejections] = useState<Record<string, string>>({});
     const [editingField, setEditingField] = useState<string | null>(null);
     const [tempReason, setTempReason] = useState('');
     const [isSaving, setIsSaving] = useState(false);
 
-    // وقتی business تغییر می‌کند، فرم را آپدیت کن
     useEffect(() => {
         if (business) {
             setFormData(business);
-            setStatus(business.status || 'فعال');
-            // اگر rejections قبلی وجود دارد، بازیابی کن
+            setStatus(business.status || 'تایید شده');
             if (business.rejections) {
                 const rejMap: Record<string, string> = {};
-                business.rejections.forEach((r: any) => {
+                business.rejections.forEach((r) => {
                     rejMap[r.fieldId] = r.reason;
                 });
                 setRejections(rejMap);
@@ -93,37 +94,36 @@ export const EditBusinessModal = ({
 
     if (!formData) return null;
 
-    // فیلدهای فرم
     const fields = [
         {
-            id: 'name',
+            id: 'businessName',
             label: 'نام کسب و کار',
-            value: formData.name,
+            value: formData.businessName,
             placeholder: 'مثال: سالن زیبایی شارین',
         },
         {
-            id: 'email',
+            id: 'businessEmail',
             label: 'ایمیل',
-            value: formData.email,
+            value: formData.businessEmail,
             placeholder: 'example@gmail.com',
         },
         {
-            id: 'phone',
-            label: 'شماره همراه',
-            value: formData.phone,
+            id: 'ownerName',
+            label: 'نام مدیر کسب و کار',
+            value: formData.ownerName,
+            placeholder: 'مثال: امیر امیری',
+        },
+        {
+            id: 'ownerPhone',
+            label: 'شماره همراه مدیر',
+            value: formData.ownerPhone || '',
             placeholder: '۰۹۱۲۳۴۵۶۷۸۹',
         },
         {
-            id: 'role',
-            label: 'نقش',
-            value: formData.role,
-            placeholder: 'مثال: مدیر',
-        },
-        {
-            id: 'department',
-            label: 'دپارتمان',
-            value: formData.department,
-            placeholder: 'مثال: IT',
+            id: 'categoryName',
+            label: 'دسته‌بندی',
+            value: formData.categoryName,
+            placeholder: 'مثال: کافه | رستوران',
         },
         {
             id: 'description',
@@ -132,8 +132,14 @@ export const EditBusinessModal = ({
             placeholder: 'توضیحات کسب و کار...',
         },
     ];
+    const socialMediaItems = [
+        {
+            id: 'telegram',
+            label: 'تلگرام',
+            icon: Send,
+        },
+    ];
 
-    // تغییر فیلد
     const handleFieldChange = (fieldId: string, value: any) => {
         setFormData({
             ...formData,
@@ -141,13 +147,11 @@ export const EditBusinessModal = ({
         });
     };
 
-    // شروع ویرایش دلیل
     const startEditing = (fieldId: string) => {
         setEditingField(fieldId);
         setTempReason(rejections[fieldId] || '');
     };
 
-    // تایید دلیل
     const confirmReason = (fieldId: string) => {
         if (!tempReason.trim()) {
             alert('لطفاً دلیل را وارد کنید');
@@ -162,7 +166,6 @@ export const EditBusinessModal = ({
         setEditingField(null);
         setTempReason('');
 
-        // اگر حداقل یک رد وجود دارد، وضعیت را "رد شده" کن
         const newRejections = { ...rejections, [fieldId]: tempReason };
         const hasRejection = Object.keys(newRejections).length > 0;
         if (hasRejection && status !== 'رد شده') {
@@ -170,24 +173,20 @@ export const EditBusinessModal = ({
         }
     };
 
-    // حذف دلیل
     const removeRejection = (fieldId: string) => {
         const newRejections = { ...rejections };
         delete newRejections[fieldId];
         setRejections(newRejections);
 
-        // اگر هیچ ردی باقی نماند و وضعیت "رد شده" بود، به "فعال" برگردان
         if (Object.keys(newRejections).length === 0 && status === 'رد شده') {
-            setStatus('فعال');
+            setStatus('تایید شده');
         }
     };
 
-    // ذخیره نهایی
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
 
-        // ساخت آبجکت نهایی
         const rejectionArray = Object.keys(rejections).map((key) => ({
             fieldId: key,
             fieldLabel: fields.find((f) => f.id === key)?.label || key,
@@ -196,13 +195,12 @@ export const EditBusinessModal = ({
 
         const updatedBusiness: Business = {
             ...formData,
-            status: status,
+            status: status as Business['status'],
             rejections: rejectionArray,
         };
 
         console.log('📤 ذخیره:', updatedBusiness);
 
-        // فراخوانی تابع به‌روزرسانی
         setTimeout(() => {
             onUpdate(updatedBusiness);
             setIsSaving(false);
@@ -210,7 +208,6 @@ export const EditBusinessModal = ({
         }, 500);
     };
 
-    // حذف
     const handleDelete = () => {
         if (window.confirm('آیا از حذف این کسب و کار مطمئن هستید؟')) {
             onDelete(formData.id);
@@ -218,7 +215,6 @@ export const EditBusinessModal = ({
         }
     };
 
-    // بررسی رد شدن
     const isRejected = (fieldId: string) => {
         return !!rejections[fieldId];
     };
@@ -231,7 +227,7 @@ export const EditBusinessModal = ({
             >
                 <DialogHeader>
                     <DialogTitle className="text-right text-xl">
-                        ویرایش کسب و کار: {formData.name}
+                        ویرایش کسب و کار: {formData.businessName}
                     </DialogTitle>
                     {Object.keys(rejections).length > 0 && (
                         <Badge variant="destructive" className="mt-2">
@@ -241,7 +237,6 @@ export const EditBusinessModal = ({
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* فیلدها */}
                     <div className="grid grid-cols-2 gap-4">
                         {fields.map((field) => {
                             const rejected = isRejected(field.id);
@@ -288,7 +283,6 @@ export const EditBusinessModal = ({
                                         )}
                                     </div>
 
-                                    {/* ورودی */}
                                     <div
                                         className={
                                             rejected && !isEditing
@@ -331,7 +325,6 @@ export const EditBusinessModal = ({
                                         )}
                                     </div>
 
-                                    {/* ویرایش دلیل */}
                                     {isEditing && (
                                         <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-md">
                                             <Label className="text-sm text-amber-700">
@@ -380,7 +373,6 @@ export const EditBusinessModal = ({
                                         </div>
                                     )}
 
-                                    {/* نمایش دلیل */}
                                     {rejected && !isEditing && (
                                         <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md">
                                             <div className="flex items-start gap-2">
@@ -409,36 +401,42 @@ export const EditBusinessModal = ({
                         })}
                     </div>
 
-                    {/* وضعیت */}
-                    <div className="flex items-center gap-4 pt-2 border-t">
-                        <Label className="min-w-[100px]">وضعیت:</Label>
-                        <Select value={status} onValueChange={setStatus}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="فعال">فعال</SelectItem>
-                                <SelectItem value="غیرفعال">غیرفعال</SelectItem>
-                                <SelectItem value="تعلیق">تعلیق</SelectItem>
-                                <SelectItem value="رد شده">رد شده</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Badge
-                            className={
-                                status === 'فعال'
-                                    ? 'bg-emerald-500'
-                                    : status === 'غیرفعال'
-                                      ? 'bg-gray-500'
-                                      : status === 'تعلیق'
-                                        ? 'bg-amber-500'
-                                        : 'bg-red-500'
-                            }
-                        >
-                            {status}
-                        </Badge>
+                    <div className="space-y-2 pt-2 border-t">
+                        <div className="flex items-center gap-4">
+                            <Label className="min-w-[100px]">وضعیت:</Label>
+                            <Select value={status} onValueChange={setStatus}>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="تایید شده">
+                                        تایید شده
+                                    </SelectItem>
+                                    <SelectItem value="تعلیق">تعلیق</SelectItem>
+                                    <SelectItem value="رد شده">
+                                        رد شده
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Badge
+                                className={
+                                    status === 'تایید شده'
+                                        ? 'bg-emerald-500'
+                                        : status === 'تعلیق'
+                                          ? 'bg-amber-500'
+                                          : 'bg-red-500'
+                                }
+                            >
+                                {status}
+                            </Badge>
+                        </div>
+                        {status === 'رد شده' &&
+                            Object.keys(rejections).length === 0 && (
+                                <p className="text-sm text-red-800 mr-[116px]">
+                                    🤔 بدون دلیل که نمیتونی کسب و کار رو حذف کنی
+                                </p>
+                            )}
                     </div>
-
-                    {/* رسانه‌ها */}
                     <div className="pt-2 border-t">
                         <Label className="text-right block mb-3">
                             رسانه‌ها
@@ -588,7 +586,6 @@ export const EditBusinessModal = ({
                         </div>
                     </div>
 
-                    {/* دکمه‌ها */}
                     <div className="flex gap-2 pt-4 border-t">
                         <Button
                             type="button"

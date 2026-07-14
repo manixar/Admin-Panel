@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Index from './pages/Index';
+import { Toaster } from 'sonner';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import NotFound from './pages/NotFound';
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
+                <Toaster position="top-left" richColors dir="rtl" />
             </BrowserRouter>
         </QueryClientProvider>
     );
